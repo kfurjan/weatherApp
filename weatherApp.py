@@ -2,10 +2,10 @@ from PyQt5 import QtWidgets, uic
 import sys
 
 
-class weatehrApp(QtWidgets.QMainWindow):
+class weatherApp(QtWidgets.QMainWindow):
     def __init__(self):
         # initialize window
-        super(weatehrApp, self).__init__()
+        super(weatherApp, self).__init__()
         uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
 
         # call onClick function
@@ -22,7 +22,7 @@ class weatehrApp(QtWidgets.QMainWindow):
 
 def main():
     app = QtWidgets.QApplication([])
-    window = weatehrApp()
+    window = weatherApp()
     window.show()
     sys.exit(app.exec())
 
