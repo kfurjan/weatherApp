@@ -1,26 +1,31 @@
+from PyQt5 import QtWidgets, uic
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QIcon
 
 
-class App(QWidget):
-
+class weatehrApp(QtWidgets.QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.title = 'WeatherApp'
-        self.left = 300
-        self.top = 200
-        self.width = 800
-        self.height = 600
-        self.initUI()
+        # initialize window
+        super(weatehrApp, self).__init__()
+        uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
 
-    def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        self.show()
+        # call onClick function
+        self.city = ''
+        self.submitCity.clicked.connect(self.onClick)
+
+    def onClick(self):
+        if self.inputCity.text() == '':
+            QtWidgets.QMessageBox.about(self, "Unknown input", "Please type something")
+        else:
+            self.city = self.inputCity.text()
+            self.setWindowTitle("WeatherApp - " + self.city)
+
+
+def main():
+    app = QtWidgets.QApplication([])
+    window = weatehrApp()
+    window.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())
+    main()
