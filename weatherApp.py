@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, uic
+from util.helpers import getCityWeather
 import sys
 
 
@@ -18,6 +19,9 @@ class weatherApp(QtWidgets.QMainWindow):
         else:
             self.city = self.inputCity.text()
             self.setWindowTitle("WeatherApp - " + self.city)
+
+            weather = getCityWeather(self.city)
+            self.cityTemp.setText(str(round(weather["main"]["temp"] - 273.15, 2)) + "℃")
 
 
 def main():
