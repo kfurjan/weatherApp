@@ -1,35 +1,1 @@
-from PyQt5 import QtWidgets, uic
-from util.helpers import getCityWeather
-import sys
-
-
-class weatherApp(QtWidgets.QMainWindow):
-    def __init__(self):
-        # initialize window
-        super(weatherApp, self).__init__()
-        uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
-
-        # call onClick function
-        self.city = ''
-        self.submitCity.clicked.connect(self.onClick)
-
-    def onClick(self):
-        if self.inputCity.text() == '':
-            QtWidgets.QMessageBox.about(self, "Unknown input", "Please type something")
-        else:
-            self.city = self.inputCity.text()
-            self.setWindowTitle("WeatherApp - " + self.city)
-
-            weather = getCityWeather(self.city)
-            self.cityTemp.setText(str(round(weather["main"]["temp"] - 273.15, 2)) + "℃")
-
-
-def main():
-    app = QtWidgets.QApplication([])
-    window = weatherApp()
-    window.show()
-    sys.exit(app.exec())
-
-
-if __name__ == '__main__':
-    main()
+import sysfrom PyQt5 import QtWidgets, uicfrom util.helpers import getCityWeather, getDayclass weatherApp(QtWidgets.QMainWindow):    def __init__(self):        # initialize window        super(weatherApp, self).__init__()        uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)        # call onClick function        self.city = ''        self.submitCity.clicked.connect(self.onClick)    def onClick(self):        # get weather report for given city        self.city = self.inputCity.text()        weatherReport = getCityWeather(self.city)        # invalid input handling        if weatherReport is None:            QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")        else:            # update window title with city name            self.setWindowTitle("WeatherApp - " + self.city)            # display label with city temperature, weather description            self.cityTemp.setText(str(round(weatherReport["main"]["temp"] - 273.15, 2)) + "℃")            self.weatherDescription.setText(weatherReport["weather"][0]["description"])            # display correct days            self.labelToday.setText(getDay())            self.labelTomorrow.setText(getDay(tomorrow=True))            self.labelDayAfter.setText(getDay(dayAfter=True))def main():    app = QtWidgets.QApplication([])    weatherAppWindow = weatherApp()    weatherAppWindow.show()    sys.exit(app.exec())if __name__ == '__main__':    main()
