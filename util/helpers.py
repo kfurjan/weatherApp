@@ -36,8 +36,8 @@ def getDay(daysFromNow=None):
     :return: Name of the day based on current datetime
     """
 
-    # hard coded function to use days in english instead of
-    # language used within operating system's region settings
+    # hard coded function to return days in english instead of
+    # language within operating system's region settings
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
     if daysFromNow is not None:
