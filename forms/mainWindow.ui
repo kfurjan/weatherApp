@@ -112,12 +112,12 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>220</y>
+      <y>250</y>
       <width>711</width>
       <height>51</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="displayLayout">
+    <layout class="QHBoxLayout" name="daysLayout">
      <item>
       <widget class="QLabel" name="labelToday">
        <property name="font">
@@ -174,9 +174,9 @@
    <widget class="QLabel" name="weatherDescription">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>240</x>
       <y>140</y>
-      <width>271</width>
+      <width>311</width>
       <height>61</height>
      </rect>
     </property>
@@ -196,6 +196,135 @@
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>300</y>
+      <width>191</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="todaysForecastLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="todaysForecastTemp">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="todaysForecastDesc">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>300</y>
+      <width>191</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="tomoForecastLayout">
+     <item row="2" column="0">
+      <widget class="QLabel" name="tomoForecastDesc">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="tomoForecastTemp">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>300</y>
+      <width>191</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="todaysForecastLayout_3">
+     <item row="1" column="0">
+      <widget class="QLabel" name="dayAftersForecastDesc">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="dayAftersForecastTemp">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
