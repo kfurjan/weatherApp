@@ -1,6 +1,7 @@
 import datetime
 import requests
 import locale
+from dateutil import parser
 
 
 def getCityWeather(city, forecast=None):
@@ -46,3 +47,28 @@ def getDay(daysFromNow=None):
         return day.strftime("%A")
 
     return datetime.date.today().strftime("%A")
+
+
+def getWeatherByDay(city=None, tomorrow=None, dayAfter=None):
+    forecast = getCityWeather(city="Zagreb", forecast=True)
+    today = datetime.date.today().strftime("%a")
+
+    for i in range(0, 8):
+        date = forecast["list"][int(i)]["dt_txt"]
+        day = parser.parse(date)
+
+        if today != day.strftime("%a"):
+            tomorrow = day.strftime("%a")
+            print(tomorrow)
+            break
+
+    for i in range(8, 40):
+        date = forecast["list"][int(i)]["dt_txt"]
+        day = parser.parse(date)
+
+        if tomorrow != day.strftime("%a"):
+            dayAfter = day.strftime("%a")
+            print(dayAfter)
+            break
+
+    # print(datetime.date.today())
