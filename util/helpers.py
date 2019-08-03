@@ -7,7 +7,7 @@ from dateutil import parser
 
 def getWeatherReport(city, forecast=None):
     """
-    Get current or forecast weather report for given city. Also 'caches' every weather report on 5 minutes.
+    Get current or forecast weather report for given city. Also 'caches' every weather report for 5 minutes.
     :param city: Specify city for which to get weather report
     :param forecast: Param to use when forecast weather report is needed
     :return: Weather report if city is known
@@ -34,7 +34,7 @@ def getWeatherReport(city, forecast=None):
 def getDay(daysFromNow=0):
     """
     Get name of the day
-    :param daysFromNow: How many days from current day
+    :param daysFromNow: How many days from current day; default 0 => today
     :return: Name of the day based on current datetime
     """
 

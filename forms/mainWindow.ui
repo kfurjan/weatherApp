@@ -36,7 +36,7 @@
      <item>
       <widget class="QLineEdit" name="inputCity">
        <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+        <enum>Qt::WheelFocus</enum>
        </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
@@ -174,9 +174,9 @@
    <widget class="QLabel" name="weatherDescription">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>150</x>
       <y>140</y>
-      <width>421</width>
+      <width>501</width>
       <height>61</height>
      </rect>
     </property>
