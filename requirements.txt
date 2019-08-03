@@ -1,2 +1,3 @@
-requests==2.22
-pyqt5==5.13
+requests>=2.22
+pyqt5>=5.13
+requests_cache>=0.5
