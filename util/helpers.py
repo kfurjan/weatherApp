@@ -1,6 +1,7 @@
 import datetime
 import locale
 import requests
+import requests_cache
 from dateutil import parser
 
 
@@ -18,6 +19,7 @@ def getWeatherReport(city, forecast=None):
     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
     cityWeatherUrl = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
 
+    requests_cache.install_cache(cache_name='weatherApp', backend='sqlite', expire_after=120)
     weatherReport = requests.get(cityWeatherUrl)
 
     if weatherReport.status_code == 200:
