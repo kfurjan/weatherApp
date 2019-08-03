@@ -1,10 +1,10 @@
 import datetime
-import requests
 import locale
+import requests
 from dateutil import parser
 
 
-def getCityWeather(city, forecast=None):
+def getWeatherReport(city, forecast=None):
     """
     Get current or forecast weather report for given city
     :param city: Specify city for which to get weather report
@@ -53,7 +53,7 @@ def getCurrentWeather(city):
     :param city: Specify for which city to get forecast report
     :return: Min, max temperature and description of weather for today
     """
-    currentWeather = getCityWeather(city=city)
+    currentWeather = getWeatherReport(city=city)
     if currentWeather is None:
         return currentWeather
 
@@ -73,7 +73,7 @@ def getWeatherForecastByDay(city, daysFromNow):
     :param daysFromNow: How many days from today; 1 <= forecast <= 5
     :return: Min (6:00), max (12:00) temperature and description of weather for given day
     """
-    forecast = getCityWeather(city=city, forecast=True)
+    forecast = getWeatherReport(city=city, forecast=True)
     if forecast is None:
         return forecast
 
