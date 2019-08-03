@@ -2,7 +2,7 @@
 Weather application created using Python3 and PyQt5 framework
 
 
-## To try it yourself:
+### To try it yourself:
 
 - git clone this project
 - Install dependencies with:
