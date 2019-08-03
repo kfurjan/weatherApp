@@ -18,15 +18,15 @@ def getCityWeather(city, forecast=None):
     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
     cityWeatherUrl = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
 
-    report = requests.get(cityWeatherUrl)
+    weatherReport = requests.get(cityWeatherUrl)
 
-    if report.status_code == 200:
-        return report.json()
+    if weatherReport.status_code == 200:
+        return weatherReport.json()
 
     # if city is unknown, spelling is wrong or server is unreachable
     # return weather report as None object
-    report = None
-    return report
+    weatherReport = None
+    return weatherReport
 
 
 def getDay(daysFromNow=0):
@@ -45,14 +45,38 @@ def getDay(daysFromNow=0):
     return day
 
 
-def getWeatherForecastByDay(city=None, daysFromNow=None):
+def getCurrentWeather(city):
+    """
+    Get weather report for today only. This function is needed because it has all important information
+    about weather for today only. Forecast weather report changes for today every 3 hours so it's not
+    reliable source of information
+    :param city: Specify for which city to get forecast report
+    :return: Min, max temperature and description of weather for today
+    """
+    currentWeather = getCityWeather(city=city)
+    if currentWeather is None:
+        return currentWeather
+
+    currentTemp = (round(currentWeather["main"]["temp"] - 273.15, 1))
+    tempMin = round(currentWeather["main"]["temp_min"] - 273.15, 1)
+    tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
+    weatherDesc = currentWeather["weather"][0]["description"]
+    weatherDescGen = currentWeather["weather"][0]["main"]
+
+    return currentTemp, tempMin, tempMax, weatherDesc, weatherDescGen
+
+
+def getWeatherForecastByDay(city, daysFromNow):
     """
     Filters 5-day weather forecast report for given day
     :param city: Specify for which city to get forecast report
-    :param daysFromNow: How many days from today
+    :param daysFromNow: How many days from today; 1 <= forecast <= 5
     :return: Min (6:00), max (12:00) temperature and description of weather for given day
     """
     forecast = getCityWeather(city=city, forecast=True)
+    if forecast is None:
+        return forecast
+
     neededDay = getDay(daysFromNow=daysFromNow)
 
     filteredForecast = []
