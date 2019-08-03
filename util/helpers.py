@@ -16,8 +16,7 @@ def getCityWeather(city, forecast=None):
         reportType = "forecast"
 
     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-    cityWeatherUrl = "http://api.openweathermap.org/data/2.5/" + reportType + "?appid=" \
-                     + OMW_API_key + "&q=" + city
+    cityWeatherUrl = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
 
     report = requests.get(cityWeatherUrl)
 
@@ -30,7 +29,7 @@ def getCityWeather(city, forecast=None):
     return report
 
 
-def getDay(daysFromNow=None):
+def getDay(daysFromNow=0):
     """
     Get name of the day
     :param daysFromNow: How many days from current day
@@ -41,34 +40,33 @@ def getDay(daysFromNow=None):
     # language within operating system's region settings
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
-    if daysFromNow is not None:
-        today = datetime.date.today()
-        day = today + datetime.timedelta(days=int(daysFromNow))
-        return day.strftime("%A")
-
-    return datetime.date.today().strftime("%A")
+    today = datetime.date.today()
+    day = today + datetime.timedelta(days=int(daysFromNow))
+    return day
 
 
-def getWeatherByDay(city=None, tomorrow=None, dayAfter=None):
-    forecast = getCityWeather(city="Zagreb", forecast=True)
-    today = datetime.date.today().strftime("%a")
+def getWeatherForecastByDay(city=None, daysFromNow=None):
+    """
+    Filters 5-day weather forecast report for given day
+    :param city: Specify for which city to get forecast report
+    :param daysFromNow: How many days from today
+    :return: Min (6:00), max (12:00) temperature and description of weather for given day
+    """
+    forecast = getCityWeather(city=city, forecast=True)
+    neededDay = getDay(daysFromNow=daysFromNow)
 
-    for i in range(0, 8):
+    filteredForecast = []
+    for i in range(0, 40):
         date = forecast["list"][int(i)]["dt_txt"]
         day = parser.parse(date)
 
-        if today != day.strftime("%a"):
-            tomorrow = day.strftime("%a")
-            print(tomorrow)
-            break
+        if day.date() == neededDay:
+            filteredForecast.append(forecast["list"][int(i)])
+            if len(filteredForecast) >= 8:
+                break
 
-    for i in range(8, 40):
-        date = forecast["list"][int(i)]["dt_txt"]
-        day = parser.parse(date)
+    tempMin = round(filteredForecast[2]['main']['temp_min'] - 273.15, 1)
+    tempMax = round(filteredForecast[4]['main']['temp_max'] - 273.15, 1)
+    weatherDesc = filteredForecast[4]['weather'][0]['main']
 
-        if tomorrow != day.strftime("%a"):
-            dayAfter = day.strftime("%a")
-            print(dayAfter)
-            break
-
-    # print(datetime.date.today())
+    return str(tempMin), str(tempMax), weatherDesc
