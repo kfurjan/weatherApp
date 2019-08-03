@@ -1,5 +1,6 @@
 import datetime
 import locale
+import urllib.request
 import requests
 import requests_cache
 from dateutil import parser
@@ -17,10 +18,10 @@ def getWeatherReport(city, forecast=None):
         reportType = "forecast"
 
     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-    cityWeatherUrl = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
+    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
 
     requests_cache.install_cache(cache_name='weatherApp', backend='sqlite', expire_after=600)
-    weatherReport = requests.get(cityWeatherUrl)
+    weatherReport = requests.get(url=url)
 
     if weatherReport.status_code == 200:
         return weatherReport.json()
@@ -64,8 +65,9 @@ def getCurrentWeather(city):
     tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
     weatherDesc = currentWeather["weather"][0]["description"]
     weatherDescGen = currentWeather["weather"][0]["main"]
+    icon = currentWeather["weather"][0]["icon"]
 
-    return currentTemp, tempMin, tempMax, weatherDesc, weatherDescGen
+    return currentTemp, tempMin, tempMax, weatherDesc, weatherDescGen, icon
 
 
 def getWeatherForecastByDay(city, daysFromNow):
@@ -106,4 +108,19 @@ def getWeatherForecastByDay(city, daysFromNow):
             tempMax = newTempMax
 
     weatherDesc = filteredForecast[4]['weather'][0]['main']
-    return tempMin, tempMax, weatherDesc
+    icon = filteredForecast[4]['weather'][0]['icon']
+    return tempMin, tempMax, weatherDesc, icon
+
+
+def getWeatherIcon(icon):
+    """
+    Get icon for belonging weather report
+    :param icon: Specify icon name
+    :return: File path for icon
+    """
+    url = 'http://openweathermap.org/img/wn/{}.png'.format(icon)
+    filename = 'icons/{}.png'.format(icon)
+
+    urllib.request.urlretrieve(url=url, filename=filename)
+
+    return filename
