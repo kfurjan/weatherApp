@@ -89,8 +89,18 @@ def getWeatherForecastByDay(city, daysFromNow):
             if len(filteredForecast) >= 8:
                 break
 
-    tempMin = round(filteredForecast[2]['main']['temp_min'] - 273.15, 1)
-    tempMax = round(filteredForecast[4]['main']['temp_max'] - 273.15, 1)
     weatherDesc = filteredForecast[4]['weather'][0]['main']
 
-    return str(tempMin), str(tempMax), weatherDesc
+    tempMin = round(filteredForecast[0]['main']['temp_min'] - 273.15, 1)
+    tempMax = round(filteredForecast[0]['main']['temp_max'] - 273.15, 1)
+    for i in range(1, 8):
+        newTempMin = round(filteredForecast[i]['main']['temp_min'] - 273.15, 1)
+        newTempMax = round(filteredForecast[i]['main']['temp_max'] - 273.15, 1)
+
+        if tempMin > newTempMin:
+            tempMin = newTempMin
+
+        if tempMax < newTempMax:
+            tempMax = newTempMax
+
+    return tempMin, tempMax, weatherDesc
