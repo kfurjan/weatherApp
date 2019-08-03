@@ -57,7 +57,7 @@ def getCurrentWeather(city):
     if currentWeather is None:
         return currentWeather
 
-    currentTemp = (round(currentWeather["main"]["temp"] - 273.15, 1))
+    currentTemp = round(currentWeather["main"]["temp"] - 273.15, 1)
     tempMin = round(currentWeather["main"]["temp_min"] - 273.15, 1)
     tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
     weatherDesc = currentWeather["weather"][0]["description"]
@@ -89,8 +89,6 @@ def getWeatherForecastByDay(city, daysFromNow):
             if len(filteredForecast) >= 8:
                 break
 
-    weatherDesc = filteredForecast[4]['weather'][0]['main']
-
     tempMin = round(filteredForecast[0]['main']['temp_min'] - 273.15, 1)
     tempMax = round(filteredForecast[0]['main']['temp_max'] - 273.15, 1)
     for i in range(1, 8):
@@ -103,4 +101,5 @@ def getWeatherForecastByDay(city, daysFromNow):
         if tempMax < newTempMax:
             tempMax = newTempMax
 
+    weatherDesc = filteredForecast[4]['weather'][0]['main']
     return tempMin, tempMax, weatherDesc
