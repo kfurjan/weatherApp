@@ -7,7 +7,7 @@ from dateutil import parser
 
 def getWeatherReport(city, forecast=None):
     """
-    Get current or forecast weather report for given city
+    Get current or forecast weather report for given city. Also 'caches' every weather report on 5 minutes.
     :param city: Specify city for which to get weather report
     :param forecast: Param to use when forecast weather report is needed
     :return: Weather report if city is known
@@ -19,7 +19,7 @@ def getWeatherReport(city, forecast=None):
     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
     cityWeatherUrl = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
 
-    requests_cache.install_cache(cache_name='weatherApp', backend='sqlite', expire_after=120)
+    requests_cache.install_cache(cache_name='weatherApp', backend='sqlite', expire_after=600)
     weatherReport = requests.get(cityWeatherUrl)
 
     if weatherReport.status_code == 200:
@@ -53,7 +53,7 @@ def getCurrentWeather(city):
     about weather for today only. Forecast weather report changes for today every 3 hours so it's not
     reliable source of information
     :param city: Specify for which city to get forecast report
-    :return: Min, max temperature and description of weather for today
+    :return: Current, min and max temperature, detailed description and general description of weather for today
     """
     currentWeather = getWeatherReport(city=city)
     if currentWeather is None:
@@ -81,6 +81,7 @@ def getWeatherForecastByDay(city, daysFromNow):
 
     neededDay = getDay(daysFromNow=daysFromNow)
 
+    # filters 5-day forecast to only specified day
     filteredForecast = []
     for i in range(0, 40):
         date = forecast["list"][int(i)]["dt_txt"]
@@ -91,6 +92,7 @@ def getWeatherForecastByDay(city, daysFromNow):
             if len(filteredForecast) >= 8:
                 break
 
+    # searches for maximum and minimum temperature for given day
     tempMin = round(filteredForecast[0]['main']['temp_min'] - 273.15, 1)
     tempMax = round(filteredForecast[0]['main']['temp_max'] - 273.15, 1)
     for i in range(1, 8):
