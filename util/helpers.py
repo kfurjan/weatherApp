@@ -36,7 +36,7 @@ def getDay(daysFromNow=0):
     """
     Get name of the day
     :param daysFromNow: How many days from current day; default 0 => today
-    :return: Name of the day based on current datetime
+    :return: Name of the day based on current date
     """
 
     # hard coded function to return days in english instead of
@@ -54,7 +54,8 @@ def getCurrentWeather(city):
     about weather for today only. Forecast weather report changes for today every 3 hours so it's not
     reliable source of information
     :param city: Specify for which city to get forecast report
-    :return: Current, min and max temperature, detailed description and general description of weather for today
+    :return: Current, min and max temperature, detailed description,
+    general description and icon of weather for today
     """
     currentWeather = getWeatherReport(city=city)
     if currentWeather is None:
@@ -75,7 +76,7 @@ def getWeatherForecastByDay(city, daysFromNow):
     Filters 5-day weather forecast report for given day
     :param city: Specify for which city to get forecast report
     :param daysFromNow: How many days from today; 1 <= forecast <= 5
-    :return: Min (6:00), max (12:00) temperature and description of weather for given day
+    :return: Min, max temperature, description and icon of weather for given day
     """
     forecast = getWeatherReport(city=city, forecast=True)
     if forecast is None:
@@ -115,8 +116,8 @@ def getWeatherForecastByDay(city, daysFromNow):
 def getWeatherIcon(icon):
     """
     Get icon for belonging weather report
-    :param icon: Specify icon name
-    :return: File path for icon
+    :param icon: Pass icon name
+    :return: File path for saved icon
     """
     url = 'http://openweathermap.org/img/wn/{}.png'.format(icon)
     filename = 'icons/{}.png'.format(icon)
