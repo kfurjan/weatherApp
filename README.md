@@ -1,5 +1,5 @@
 # weatherApp
-Weather application created using Python3 and PyQt5 framework. To get weather report, this application uses OpenWeatherMap APIs - current weather API and 5-day weather forecast API.
+Weather application created using Python3 and PyQt5 framework. To get weather report, this application uses OpenWeatherMap APIs - current weather API and 5-day weather forecast API. To use this application, access to internet is necessary.
 
 
 ### To try it yourself:
