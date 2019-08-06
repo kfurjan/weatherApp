@@ -4,6 +4,7 @@ import urllib.request
 import requests
 import requests_cache
 from dateutil import parser
+from collections import namedtuple
 
 
 def getWeatherReport(city, forecast=None):
@@ -61,14 +62,16 @@ def getCurrentWeather(city):
     if currentWeather is None:
         return currentWeather
 
-    currentTemp = round(currentWeather["main"]["temp"] - 273.15, 1)
-    tempMin = round(currentWeather["main"]["temp_min"] - 273.15, 1)
-    tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
-    weatherDesc = currentWeather["weather"][0]["description"]
-    weatherDescGen = currentWeather["weather"][0]["main"]
-    icon = currentWeather["weather"][0]["icon"]
+    weather = namedtuple('weather', 'currentTemp tempMin tempMax weatherDesc weatherDescGen icon')
 
-    return currentTemp, tempMin, tempMax, weatherDesc, weatherDescGen, icon
+    weather.currentTemp = round(currentWeather["main"]["temp"] - 273.15, 1)
+    weather.tempMin = round(currentWeather["main"]["temp_min"] - 273.15, 1)
+    weather.tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
+    weather.weatherDesc = currentWeather["weather"][0]["description"]
+    weather.weatherDescGen = currentWeather["weather"][0]["main"]
+    weather.icon = currentWeather["weather"][0]["icon"]
+
+    return weather
 
 
 def getWeatherForecastByDay(city, daysFromNow):
@@ -108,9 +111,13 @@ def getWeatherForecastByDay(city, daysFromNow):
         if tempMax < newTempMax:
             tempMax = newTempMax
 
-    weatherDesc = filteredForecast[4]['weather'][0]['main']
-    icon = filteredForecast[4]['weather'][0]['icon']
-    return tempMin, tempMax, weatherDesc, icon
+    weather = namedtuple('weather', 'tempMin tempMax weatherDesc icon')
+    weather.tempMin = tempMin
+    weather.tempMax = tempMax
+    weather.weatherDesc = filteredForecast[4]['weather'][0]['main']
+    weather.icon = filteredForecast[4]['weather'][0]['icon']
+
+    return weather
 
 
 def getWeatherIcon(icon):
