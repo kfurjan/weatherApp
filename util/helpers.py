@@ -1,10 +1,12 @@
 import datetime
 import locale
 import urllib.request
+import asyncio
+import aiohttp
+from collections import namedtuple
 import requests
 import requests_cache
 from dateutil import parser
-from collections import namedtuple
 
 
 def getWeatherReport(city, forecast=None):
@@ -132,3 +134,34 @@ def getWeatherIcon(icon):
     urllib.request.urlretrieve(url=url, filename=filename)
 
     return filename
+
+
+# def getURLsInList(city):
+#     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
+#     url1 = "http://api.openweathermap.org/data/2.5/weather?appid={}&q={}".format(OMW_API_key, city)
+#     url2 = "http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}".format(OMW_API_key, city)
+#     nekaLista = []
+#     nekaLista.append(url1)
+#     nekaLista.append(url2)
+#     return nekaLista
+
+
+async def get(url):
+    print('GET: ', url)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            t = '{0:%H:%M:%S}'.format(datetime.datetime.now())
+            print('Done: {}, {} ({})'.format(t, response.url, response.status))
+
+
+def getAsyncReports(city):
+    OMW_API_key = '014daf06eddbe256673d2d86504c69d1'
+    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(OMW_API_key, city)
+    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(OMW_API_key, city)
+
+    loop = asyncio.get_event_loop()
+    tasks = [
+        asyncio.ensure_future(get(url1)),
+        asyncio.ensure_future(get(url2))
+    ]
+    loop.run_until_complete(asyncio.wait(tasks))
