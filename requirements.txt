@@ -3,3 +3,4 @@ pyqt5>=5.13
 requests_cache>=0.5
 aiohttp
 asyncio
+python-dateutil

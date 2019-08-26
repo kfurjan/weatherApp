@@ -1,9 +1,10 @@
+import asyncio
 import datetime
 import locale
 import urllib.request
-import asyncio
-import aiohttp
 from collections import namedtuple
+
+import aiohttp
 import requests
 import requests_cache
 from dateutil import parser
@@ -146,15 +147,32 @@ def getWeatherIcon(icon):
 #     return nekaLista
 
 
-async def get(url):
-    print('GET: ', url)
+async def get(city, forecast=None):
+    """
+    Get current or forecast weather report for given city
+    :param city: Specify city for which to get weather report
+    :param forecast: Param to use when forecast weather report is needed
+    :return: Weather report if city is known
+    """
+    reportType = "weather"
+    if forecast is not None:
+        reportType = "forecast"
+
+    OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
+    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
+
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
-            t = '{0:%H:%M:%S}'.format(datetime.datetime.now())
-            print('Done: {}, {} ({})'.format(t, response.url, response.status))
+
+            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
+            if response.status != 200:
+                return None
+
+            # return weather report as dict object
+            return await response.json()
 
 
-def getAsyncReports(city):
+async def getAsyncReports(city):
     OMW_API_key = '014daf06eddbe256673d2d86504c69d1'
     url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(OMW_API_key, city)
     url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(OMW_API_key, city)
@@ -164,4 +182,11 @@ def getAsyncReports(city):
         asyncio.ensure_future(get(url1)),
         asyncio.ensure_future(get(url2))
     ]
-    loop.run_until_complete(asyncio.wait(tasks))
+
+    task1 = asyncio.create_task(get(url1))
+    task2 = asyncio.create_task(get(url2))
+
+    done, pending = await asyncio.wait(task1)
+    print(done)
+    done, pending = await asyncio.wait(task2)
+    print(done)
