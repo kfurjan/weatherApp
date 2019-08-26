@@ -5,8 +5,6 @@ import urllib.request
 from collections import namedtuple
 
 import aiohttp
-import requests
-import requests_cache
 from dateutil import parser
 
 
