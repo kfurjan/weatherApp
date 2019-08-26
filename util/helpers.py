@@ -5,7 +5,51 @@ import urllib.request
 from collections import namedtuple
 
 import aiohttp
+import requests
+import requests_cache
 from dateutil import parser
+
+
+async def getResponse(url):
+    """
+    Async function for getting server response
+    :param url: Specify url for which to get response
+    :return: Server reponse if status code is 200
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+
+            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
+            if response.status != 200:
+                return None
+            
+            # return weather report as dict object
+            return await response.json()
+
+
+def getWeatherReports(city):
+    """
+    Get current weather report and forecast weather report
+    :param city: Specify for which city to get weather reports
+    :return: Current weather report and forecast weather report
+    """
+    OMW_API_key = '014daf06eddbe256673d2d86504c69d1'
+    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(OMW_API_key, city)
+    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(OMW_API_key, city)
+
+    loop = asyncio.get_event_loop()
+    tasks = [
+        asyncio.ensure_future(getResponse(url1)),
+        asyncio.ensure_future(getResponse(url2))
+    ]
+    done, pending = loop.run_until_complete(asyncio.wait(tasks))
+
+    weatherReportList = []
+    for future in done:
+        value = future.result()
+        weatherReportList.append(value)
+
+    return sorted(weatherReportList, key=len, reverse=True)
 
 
 def getDay(daysFromNow=0):
@@ -15,7 +59,8 @@ def getDay(daysFromNow=0):
     :return: Name of the day based on current date
     """
 
-    # hard coded function to return days in english instead language within operating system's region settings
+    # hard coded function to return days in english instead of
+    # language within operating system's region settings
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
     today = datetime.date.today()
@@ -23,41 +68,15 @@ def getDay(daysFromNow=0):
     return day
 
 
-async def getWeatherReport(city, forecast=None):
-    """
-    Get current or forecast weather report for given city
-    :param city: Specify city for which to get weather report
-    :param forecast: Param to use when forecast weather report is needed
-    :return: Weather report if city is known
-    """
-    reportType = "weather"
-    if forecast is not None:
-        reportType = "forecast"
-
-    OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-
-            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
-            if response.status != 200:
-                return None
-
-            # return weather report as dict object
-            return await response.json()
-
-
-def getCurrentWeather(city):
+def getCurrentWeather(currentWeather):
     """
     Get weather report for today only. This function is needed because it has all important information
     about weather for today only. Forecast weather report changes for today every 3 hours so it's not
     reliable source of information
-    :param city: Specify for which city to get forecast report
-    :return: Current, min and max temperature, detailed description,
+    :param currentWeather: Specify current weather report
+    :return: Current, min and max temperature, detailed description, 
     general description and icon of weather for today
     """
-    currentWeather = asyncio.run(getWeatherReport(city=city))
     if currentWeather is None:
         return currentWeather
 
@@ -73,16 +92,6 @@ def getCurrentWeather(city):
     return weather
 
 
-def getForecastWeatherReport(city):
-    """
-    Get forecast weather report
-    :param city: Specify for which city
-    :return: Forecast weather report
-    """
-    forecast = asyncio.run(getWeatherReport(city=city, forecast=True))
-    return forecast
-
-
 def getWeatherForecastByDay(forecast, daysFromNow):
     """
     Filters 5-day weather forecast report for given day
@@ -90,6 +99,9 @@ def getWeatherForecastByDay(forecast, daysFromNow):
     :param daysFromNow: How many days from today; 1 <= forecast <= 5
     :return: Min, max temperature, description and icon of weather for given day
     """
+    if forecast is None:
+        return forecast
+    
     neededDay = getDay(daysFromNow=daysFromNow)
 
     # filters 5-day forecast to only specified day
