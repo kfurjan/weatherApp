@@ -15,8 +15,7 @@ def getDay(daysFromNow=0):
     :return: Name of the day based on current date
     """
 
-    # hard coded function to return days in english instead of
-    # language within operating system's region settings
+    # hard coded function to return days in english instead language within operating system's region settings
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
     today = datetime.date.today()
