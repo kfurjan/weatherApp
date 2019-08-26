@@ -5,35 +5,7 @@ import urllib.request
 from collections import namedtuple
 
 import aiohttp
-import requests
-import requests_cache
 from dateutil import parser
-
-
-def getWeatherReport(city, forecast=None):
-    """
-    Get current or forecast weather report for given city. Also 'caches' every weather report for 5 minutes.
-    :param city: Specify city for which to get weather report
-    :param forecast: Param to use when forecast weather report is needed
-    :return: Weather report if city is known
-    """
-    reportType = "weather"
-    if forecast is not None:
-        reportType = "forecast"
-
-    OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
-
-    requests_cache.install_cache(cache_name='weatherApp', backend='sqlite', expire_after=600)
-    weatherReport = requests.get(url=url)
-
-    if weatherReport.status_code == 200:
-        return weatherReport.json()
-
-    # if city is unknown, spelling is wrong or server is unreachable
-    # return weather report as None object
-    weatherReport = None
-    return weatherReport
 
 
 def getDay(daysFromNow=0):
@@ -52,6 +24,31 @@ def getDay(daysFromNow=0):
     return day
 
 
+async def getWeatherReport(city, forecast=None):
+    """
+    Get current or forecast weather report for given city
+    :param city: Specify city for which to get weather report
+    :param forecast: Param to use when forecast weather report is needed
+    :return: Weather report if city is known
+    """
+    reportType = "weather"
+    if forecast is not None:
+        reportType = "forecast"
+
+    OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
+    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+
+            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
+            if response.status != 200:
+                return None
+
+            # return weather report as dict object
+            return await response.json()
+
+
 def getCurrentWeather(city):
     """
     Get weather report for today only. This function is needed because it has all important information
@@ -61,7 +58,7 @@ def getCurrentWeather(city):
     :return: Current, min and max temperature, detailed description,
     general description and icon of weather for today
     """
-    currentWeather = getWeatherReport(city=city)
+    currentWeather = asyncio.run(getWeatherReport(city=city))
     if currentWeather is None:
         return currentWeather
 
@@ -77,17 +74,23 @@ def getCurrentWeather(city):
     return weather
 
 
-def getWeatherForecastByDay(city, daysFromNow):
+def getForecastWeatherReport(city):
+    """
+    Get forecast weather report
+    :param city: Specify for which city
+    :return: Forecast weather report
+    """
+    forecast = asyncio.run(getWeatherReport(city=city, forecast=True))
+    return forecast
+
+
+def getWeatherForecastByDay(forecast, daysFromNow):
     """
     Filters 5-day weather forecast report for given day
-    :param city: Specify for which city to get forecast report
+    :param forecast: Specify forecast weather report
     :param daysFromNow: How many days from today; 1 <= forecast <= 5
     :return: Min, max temperature, description and icon of weather for given day
     """
-    forecast = getWeatherReport(city=city, forecast=True)
-    if forecast is None:
-        return forecast
-
     neededDay = getDay(daysFromNow=daysFromNow)
 
     # filters 5-day forecast to only specified day
@@ -135,58 +138,3 @@ def getWeatherIcon(icon):
     urllib.request.urlretrieve(url=url, filename=filename)
 
     return filename
-
-
-# def getURLsInList(city):
-#     OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-#     url1 = "http://api.openweathermap.org/data/2.5/weather?appid={}&q={}".format(OMW_API_key, city)
-#     url2 = "http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}".format(OMW_API_key, city)
-#     nekaLista = []
-#     nekaLista.append(url1)
-#     nekaLista.append(url2)
-#     return nekaLista
-
-
-async def get(city, forecast=None):
-    """
-    Get current or forecast weather report for given city
-    :param city: Specify city for which to get weather report
-    :param forecast: Param to use when forecast weather report is needed
-    :return: Weather report if city is known
-    """
-    reportType = "weather"
-    if forecast is not None:
-        reportType = "forecast"
-
-    OMW_API_key = "014daf06eddbe256673d2d86504c69d1"
-    url = "http://api.openweathermap.org/data/2.5/{}?appid={}&q={}".format(reportType, OMW_API_key, city)
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-
-            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
-            if response.status != 200:
-                return None
-
-            # return weather report as dict object
-            return await response.json()
-
-
-async def getAsyncReports(city):
-    OMW_API_key = '014daf06eddbe256673d2d86504c69d1'
-    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(OMW_API_key, city)
-    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(OMW_API_key, city)
-
-    loop = asyncio.get_event_loop()
-    tasks = [
-        asyncio.ensure_future(get(url1)),
-        asyncio.ensure_future(get(url2))
-    ]
-
-    task1 = asyncio.create_task(get(url1))
-    task2 = asyncio.create_task(get(url2))
-
-    done, pending = await asyncio.wait(task1)
-    print(done)
-    done, pending = await asyncio.wait(task2)
-    print(done)
