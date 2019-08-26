@@ -4,7 +4,7 @@ Weather application created using Python and PyQt5 framework. To get weather rep
 
 ### To try it yourself:
 
-- Python 3.7 or higher
+- Python 3.5 or higher
 - git clone this project
 - Install dependencies with:
 
