@@ -47,6 +47,9 @@ def getWeatherReports(city):
         value = future.result()
         weatherReportList.append(value)
 
+    if weatherReportList[0] is None:
+        return None
+
     return sorted(weatherReportList, key=len, reverse=True)
 
 

@@ -58,7 +58,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         weatherReports = getWeatherReports(city)
 
         # 'invalid input' handling
-        if weatherReports[0] is None:
+        if weatherReports is None:
             QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
 
         else:
