@@ -11,11 +11,11 @@ Weather application created using Python and PyQt5 framework. To get weather rep
 ```
 pip3 install -r requirements.txt
 ```
-- Run weatherApp with (linux):
+- Run weatherApp on linux with:
 ```
 python3 weatherApp.py
 ```
-- and on Windows:
+- or on Windows:
 ```
 py weatherApp.py
 ```
