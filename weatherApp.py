@@ -3,8 +3,8 @@ import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
 
-from util.helpers import (getCurrentWeather, getDay, getWeatherForecastByDay,
-                          getWeatherIcon, getWeatherReports)
+from util.interface import getDay, getWeatherIcon
+from util.report_handling import getCurrentWeather, getWeatherForecastByDay, getWeatherReports
 
 
 class WeatherApp(QtWidgets.QMainWindow):
