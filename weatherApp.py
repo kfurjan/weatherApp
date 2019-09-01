@@ -14,6 +14,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         super(WeatherApp, self).__init__()
         uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
         
+        # get current location based on IP address
         city = get_location()
         weatherReports = getWeatherReports(city)
 
