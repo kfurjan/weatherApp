@@ -28,6 +28,9 @@ class WeatherApp(QtWidgets.QMainWindow):
             # display days on weatherApp window
             self.displayDays()
 
+             # call onClick function on button click
+            self.submitCity.clicked.connect(self.onClick)
+
         else:
             # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
