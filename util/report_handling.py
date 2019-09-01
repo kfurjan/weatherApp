@@ -61,7 +61,7 @@ def getCurrentWeather(currentWeather):
     general description and icon of weather for today
     """
     if currentWeather is None:
-        return currentWeather
+        return None
 
     weather = namedtuple('weather', 'currentTemp tempMin tempMax weatherDesc weatherDescGen icon')
 
@@ -83,7 +83,7 @@ def getWeatherForecastByDay(forecast, daysFromNow):
     :return: Min, max temperature, description and icon of weather for given day
     """
     if forecast is None:
-        return forecast
+        return None
 
     neededDay = getDay(daysFromNow=daysFromNow)
 

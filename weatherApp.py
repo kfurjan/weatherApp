@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
 
 from util.interface import getDay, getWeatherIcon
+from util.location import get_location
 from util.report_handling import getCurrentWeather, getWeatherForecastByDay, getWeatherReports
 
 
@@ -12,9 +13,23 @@ class WeatherApp(QtWidgets.QMainWindow):
         # initialize fixed sized weatherApp instance
         super(WeatherApp, self).__init__()
         uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
+        
+        city = get_location()
+        weatherReports = getWeatherReports(city)
 
-        # call onClick function on button click
-        self.submitCity.clicked.connect(self.onClick)
+        if weatherReports is not None:
+            # update window title with city name
+            self.setWindowTitle("weatherApp - {}".format(city))
+
+            # display weather forecast on weatherApp window
+            self.displayWeather(weatherReports)
+
+            # display days on weatherApp window
+            self.displayDays()
+
+        else:
+            # call onClick function on button click
+            self.submitCity.clicked.connect(self.onClick)
 
     def displayWeather(self, weatherReports):
         # display labels with current city temperature, weather description with icons

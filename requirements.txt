@@ -3,4 +3,4 @@ pyqt5>=5.13
 aiohttp
 asyncio
 python-dateutil
-geocoder
+ipinfo
