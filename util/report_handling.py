@@ -15,9 +15,9 @@ async def get_response(url):
     """
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
-            # if city is unknown, spelling is wrong or server is unreachable, return weather report as None object
+            # if city is unknown, spelling is wrong or server is unreachable, return
             if response.status != 200:
-                return None
+                return
 
             # return weather report as dict object
             return await response.json()
@@ -89,7 +89,7 @@ def get_forecast_by_day(forecast, days_from_now):
 
         if day.date() == neededDay:
             filteredForecast.append(forecast["list"][int(i)])
-            if len(filteredForecast) >= 8:
+            if len(filteredForecast) == 8:
                 break
 
     # searches for maximum and minimum temperature for given day
