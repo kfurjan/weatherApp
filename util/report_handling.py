@@ -38,7 +38,7 @@ def get_weather_reports(city):
         asyncio.ensure_future(get_response(url1)),
         asyncio.ensure_future(get_response(url2))
     ]
-    done, pending = loop.run_until_complete(asyncio.wait(tasks))
+    done, _ = loop.run_until_complete(asyncio.wait(tasks))
 
     weatherReportList = []
     for future in done:
