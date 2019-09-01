@@ -3,10 +3,10 @@ import locale
 import urllib.request
 
 
-def get_day(daysFromNow=0):
+def get_day(days_from_now=0):
     """
     Get name of the day
-    :param daysFromNow: How many days from current day; default 0 => today
+    :param days_from_now: How many days from current day; default 0 => today
     :return: Name of the day based on current date
     """
 
@@ -15,7 +15,7 @@ def get_day(daysFromNow=0):
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
     today = datetime.date.today()
-    day = today + datetime.timedelta(days=int(daysFromNow))
+    day = today + datetime.timedelta(days=int(days_from_now))
     return day
 
 

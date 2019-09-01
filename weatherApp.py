@@ -48,7 +48,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         self.todaysIcon.setPixmap(icon)
 
         # display tomorrow's forecast with icons
-        tomorrow = get_forecast_by_day(weather_reports[1], daysFromNow=1)
+        tomorrow = get_forecast_by_day(weather_reports[1], days_from_now=1)
 
         self.tomoForecastTemp.setText('{} / {}℃'.format(tomorrow.tempMin, tomorrow.tempMax))
         self.tomoForecastDesc.setText(tomorrow.weatherDesc)
@@ -57,7 +57,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         self.tomoIcon.setPixmap(icon)
 
         # display day after tomorrow's forecast with icons
-        day_after = get_forecast_by_day(weather_reports[1], daysFromNow=2)
+        day_after = get_forecast_by_day(weather_reports[1], days_from_now=2)
 
         self.day_aftersForecastTemp.setText('{} / {}℃'.format(day_after.tempMin, day_after.tempMax))
         self.day_aftersForecastDesc.setText(day_after.weatherDesc)
@@ -68,8 +68,8 @@ class WeatherApp(QtWidgets.QMainWindow):
     def displayDays(self):
         # display correct days
         self.labelToday.setText(get_day().strftime("%A"))
-        self.labelTomorrow.setText(get_day(daysFromNow=1).strftime("%A"))
-        self.labelday_after.setText(get_day(daysFromNow=2).strftime("%A"))
+        self.labelTomorrow.setText(get_day(days_from_now=1).strftime("%A"))
+        self.labelday_after.setText(get_day(days_from_now=2).strftime("%A"))
 
     def onClick(self):
         # get weather report for given city

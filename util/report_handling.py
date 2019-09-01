@@ -75,17 +75,17 @@ def get_current_weather(currentWeather):
     return weather
 
 
-def get_forecast_by_day(forecast, daysFromNow):
+def get_forecast_by_day(forecast, days_from_now):
     """
     Filters 5-day weather forecast report for given day
     :param forecast: Specify forecast weather report
-    :param daysFromNow: How many days from today; 1 <= forecast <= 5
+    :param days_from_now: How many days from today; 1 <= forecast <= 5
     :return: Min, max temperature, description and icon of weather for given day
     """
     if forecast is None:
         return None
 
-    neededDay = get_day(daysFromNow=daysFromNow)
+    neededDay = get_day(days_from_now=days_from_now)
 
     # filters 5-day forecast to only specified day
     filteredForecast = []
