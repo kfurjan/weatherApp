@@ -4,10 +4,10 @@ from collections import namedtuple
 import aiohttp
 from dateutil import parser
 
-from util.interface import getDay
+from util.interface import get_day
 
 
-async def getResponse(url):
+async def get_response(url):
     """
     Async function for getting server response
     :param url: Specify url for which to get response
@@ -23,7 +23,7 @@ async def getResponse(url):
             return await response.json()
 
 
-def getWeatherReports(city):
+def get_weather_reports(city):
     """
     Get current weather report and forecast weather report
     :param city: Specify for which city to get weather reports
@@ -35,8 +35,8 @@ def getWeatherReports(city):
 
     loop = asyncio.get_event_loop()
     tasks = [
-        asyncio.ensure_future(getResponse(url1)),
-        asyncio.ensure_future(getResponse(url2))
+        asyncio.ensure_future(get_response(url1)),
+        asyncio.ensure_future(get_response(url2))
     ]
     done, pending = loop.run_until_complete(asyncio.wait(tasks))
 
@@ -51,7 +51,7 @@ def getWeatherReports(city):
     return sorted(weatherReportList, key=len, reverse=True)
 
 
-def getCurrentWeather(currentWeather):
+def get_current_weather(currentWeather):
     """
     Get weather report for today only. This function is needed because it has all important information
     about weather for today only. Forecast weather report changes for today every 3 hours so it's not
@@ -75,7 +75,7 @@ def getCurrentWeather(currentWeather):
     return weather
 
 
-def getWeatherForecastByDay(forecast, daysFromNow):
+def get_forecast_by_day(forecast, daysFromNow):
     """
     Filters 5-day weather forecast report for given day
     :param forecast: Specify forecast weather report
@@ -85,7 +85,7 @@ def getWeatherForecastByDay(forecast, daysFromNow):
     if forecast is None:
         return None
 
-    neededDay = getDay(daysFromNow=daysFromNow)
+    neededDay = get_day(daysFromNow=daysFromNow)
 
     # filters 5-day forecast to only specified day
     filteredForecast = []

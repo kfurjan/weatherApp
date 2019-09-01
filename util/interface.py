@@ -3,7 +3,7 @@ import locale
 import urllib.request
 
 
-def getDay(daysFromNow=0):
+def get_day(daysFromNow=0):
     """
     Get name of the day
     :param daysFromNow: How many days from current day; default 0 => today
@@ -19,7 +19,7 @@ def getDay(daysFromNow=0):
     return day
 
 
-def getWeatherIcon(icon):
+def get_weather_icon(icon):
     """
     Get icon for belonging weather report
     :param icon: Pass icon name
