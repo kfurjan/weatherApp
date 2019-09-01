@@ -9,7 +9,6 @@ def get_day(days_from_now=0):
     :param days_from_now: How many days from current day; default 0 => today
     :return: Name of the day based on current date
     """
-
     # hard coded function to return days in english instead of
     # language within operating system's region settings
     locale.setlocale(locale.LC_ALL, 'en_US.utf8')

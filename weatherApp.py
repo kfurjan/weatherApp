@@ -14,11 +14,11 @@ class WeatherApp(QtWidgets.QMainWindow):
         super(WeatherApp, self).__init__()
         uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
         
-        # get current location based on IP address
-        city = get_location()
-        weather_reports = get_weather_reports(city)
+        try:
+            # get current location based on IP address
+            city = get_location()
+            weather_reports = get_weather_reports(city)
 
-        if weather_reports is not None:
             # update window title with city name
             self.setWindowTitle("weatherApp - {}".format(city))
 
@@ -31,7 +31,7 @@ class WeatherApp(QtWidgets.QMainWindow):
              # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
 
-        else:
+        except ValueError:
             # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
 
@@ -59,28 +59,26 @@ class WeatherApp(QtWidgets.QMainWindow):
         # display day after tomorrow's forecast with icons
         day_after = get_forecast_by_day(weather_reports[1], days_from_now=2)
 
-        self.day_aftersForecastTemp.setText('{} / {}℃'.format(day_after.tempMin, day_after.tempMax))
-        self.day_aftersForecastDesc.setText(day_after.weatherDesc)
+        self.dayAftersForecastTemp.setText('{} / {}℃'.format(day_after.tempMin, day_after.tempMax))
+        self.dayAftersForecastDesc.setText(day_after.weatherDesc)
 
         icon = QPixmap(get_weather_icon(day_after.icon))
-        self.day_aftersIcon.setPixmap(icon)
+        self.dayAftersIcon.setPixmap(icon)
 
     def displayDays(self):
         # display correct days
         self.labelToday.setText(get_day().strftime("%A"))
         self.labelTomorrow.setText(get_day(days_from_now=1).strftime("%A"))
-        self.labelday_after.setText(get_day(days_from_now=2).strftime("%A"))
+        self.labelDayAfter.setText(get_day(days_from_now=2).strftime("%A"))
 
     def onClick(self):
-        # get weather report for given city
+        # get city from input field
         city = self.inputCity.text()
-        weather_reports = get_weather_reports(city)
+        
+        try:
+            # get weather report for given city
+            weather_reports = get_weather_reports(city)
 
-        # 'invalid input' handling
-        if weather_reports is None:
-            QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
-
-        else:
             # update window title with city name
             self.setWindowTitle("weatherApp - {}".format(city))
 
@@ -89,6 +87,9 @@ class WeatherApp(QtWidgets.QMainWindow):
 
             # display days on weatherApp window
             self.displayDays()
+
+        except ValueError:
+            QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
 
 
 def main():

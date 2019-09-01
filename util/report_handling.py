@@ -46,7 +46,7 @@ def get_weather_reports(city):
         weatherReportList.append(value)
 
     if weatherReportList[0] is None:
-        return None
+        raise ValueError
 
     return sorted(weatherReportList, key=len, reverse=True)
 
@@ -60,9 +60,6 @@ def get_current_weather(currentWeather):
     :return: Current, min and max temperature, detailed description,
     general description and icon of weather for today
     """
-    if currentWeather is None:
-        return None
-
     weather = namedtuple('weather', 'currentTemp tempMin tempMax weatherDesc weatherDescGen icon')
 
     weather.currentTemp = round(currentWeather["main"]["temp"] - 273.15, 1)
@@ -82,9 +79,6 @@ def get_forecast_by_day(forecast, days_from_now):
     :param days_from_now: How many days from today; 1 <= forecast <= 5
     :return: Min, max temperature, description and icon of weather for given day
     """
-    if forecast is None:
-        return None
-
     neededDay = get_day(days_from_now=days_from_now)
 
     # filters 5-day forecast to only specified day
