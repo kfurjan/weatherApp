@@ -1,5 +1,5 @@
 # weatherApp
-Weather application created using Python and PyQt5 framework. To get weather report, this application uses OpenWeatherMap REST APIs- current weather API and 5-day weather forecast API and IPinfo library to get current location based on IP address. To use this application, access to internet is necessary.
+Weather application created using Python and PyQt5 framework. To get weather report, this application uses OpenWeatherMap REST APIs - current weather API, 5-day weather forecast API and IPinfo library to get current location based on IP address. To use this application, access to internet is necessary.
 
 
 ### To try it yourself:
