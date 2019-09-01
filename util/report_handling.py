@@ -11,7 +11,7 @@ async def get_response(url):
     """
     Async function for getting server response
     :param url: Specify url for which to get response
-    :return: Server reponse if status code is 200
+    :return: Server response if status code is 200
     """
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
