@@ -24,15 +24,15 @@ async def get_response(url):
             return await response.json()
 
 
-def get_weather_reports(city):
+def get_weather_reports(city, weathermap_token):
     """
     Get current weather report and forecast weather report
     :param city: Specify for which city to get weather reports
+    :param weathermap_token: Token used to get weather reports via OpenWeatherMap REST APIs
     :return: Current weather report and forecast weather report
     """
-    OMW_API_key = '014daf06eddbe256673d2d86504c69d1'
-    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(OMW_API_key, city)
-    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(OMW_API_key, city)
+    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(weathermap_token, city)
+    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(weathermap_token, city)
 
     loop = asyncio.get_event_loop()
     tasks = [
