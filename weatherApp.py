@@ -14,7 +14,7 @@ class WeatherApp(QtWidgets.QMainWindow):
     def __init__(self):
         # initialize fixed sized weatherApp instance
         super(WeatherApp, self).__init__()
-        uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
+        uic.loadUi('forms/weatherAppWindow.ui', self).setFixedSize(800, 600)
         self.data = read_yaml_file('data/tokens.yaml')
         
         try:
