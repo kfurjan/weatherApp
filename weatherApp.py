@@ -3,6 +3,7 @@ import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
 
+from util.exceptions import NoWeatherReportForGivenLocation
 from util.interface import get_day, get_weather_icon
 from util.location import get_location
 from util.report_handling import get_current_weather, get_forecast_by_day, get_weather_reports
@@ -31,7 +32,7 @@ class WeatherApp(QtWidgets.QMainWindow):
              # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
 
-        except ValueError:
+        except NoWeatherReportForGivenLocation:
             # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
 
@@ -88,7 +89,7 @@ class WeatherApp(QtWidgets.QMainWindow):
             # display days on weatherApp window
             self.displayDays()
 
-        except ValueError:
+        except NoWeatherReportForGivenLocation:
             QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
 
 

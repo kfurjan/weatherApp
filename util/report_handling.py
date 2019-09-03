@@ -4,6 +4,7 @@ from collections import namedtuple
 import aiohttp
 from dateutil import parser
 
+from util.exceptions import NoWeatherReportForGivenLocation
 from util.interface import get_day
 
 
@@ -46,7 +47,7 @@ def get_weather_reports(city):
         weatherReportList.append(value)
 
     if weatherReportList[0] is None:
-        raise ValueError
+        raise NoWeatherReportForGivenLocation
 
     return sorted(weatherReportList, key=len, reverse=True)
 
