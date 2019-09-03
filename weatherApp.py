@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap
 from util.exceptions import NoWeatherReportForGivenLocation
 from util.interface import get_day, get_weather_icon
 from util.location import get_location
+from util.read_yaml_file import read_yaml_file
 from util.report_handling import get_current_weather, get_forecast_by_day, get_weather_reports
 
 
@@ -14,11 +15,16 @@ class WeatherApp(QtWidgets.QMainWindow):
         # initialize fixed sized weatherApp instance
         super(WeatherApp, self).__init__()
         uic.loadUi('forms/mainWindow.ui', self).setFixedSize(800, 600)
+        self.data = read_yaml_file('data/tokens.yaml')
         
         try:
             # get current location based on IP address
-            city = get_location()
-            weather_reports = get_weather_reports(city)
+            ipinfo_token = self.data['tokens']['ipinfo']
+            city = get_location(ipinfo_token)
+
+            # get weather reports
+            weathermap_token = self.data['tokens']['weathermap']
+            weather_reports = get_weather_reports(city, weathermap_token)
 
             # update window title with city name
             self.setWindowTitle("weatherApp - {}".format(city))
@@ -77,8 +83,9 @@ class WeatherApp(QtWidgets.QMainWindow):
         city = self.inputCity.text()
         
         try:
-            # get weather report for given city
-            weather_reports = get_weather_reports(city)
+            # get weather reports
+            weathermap_token = self.data['tokens']['weathermap']
+            weather_reports = get_weather_reports(city, weathermap_token)
 
             # update window title with city name
             self.setWindowTitle("weatherApp - {}".format(city))
