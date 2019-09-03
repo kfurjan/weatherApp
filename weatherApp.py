@@ -42,6 +42,27 @@ class WeatherApp(QtWidgets.QMainWindow):
             # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
 
+    def onClick(self):
+        # get city from input field
+        city = self.inputCity.text()
+
+        try:
+            # get weather reports
+            weathermap_token = self.data['tokens']['weathermap']
+            weather_reports = get_weather_reports(city, weathermap_token)
+
+            # update window title with city name
+            self.setWindowTitle("weatherApp - {}".format(city))
+
+            # display weather forecast on weatherApp window
+            self.displayWeather(weather_reports)
+
+            # display days on weatherApp window
+            self.displayDays()
+
+        except NoWeatherReportForGivenLocation:
+            QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
+
     def displayWeather(self, weather_reports):
         # display labels with current city temperature, weather description with icons
         weather = get_current_weather(weather_reports[0])
@@ -77,27 +98,6 @@ class WeatherApp(QtWidgets.QMainWindow):
         self.labelToday.setText(get_day().strftime("%A"))
         self.labelTomorrow.setText(get_day(days_from_now=1).strftime("%A"))
         self.labelDayAfter.setText(get_day(days_from_now=2).strftime("%A"))
-
-    def onClick(self):
-        # get city from input field
-        city = self.inputCity.text()
-        
-        try:
-            # get weather reports
-            weathermap_token = self.data['tokens']['weathermap']
-            weather_reports = get_weather_reports(city, weathermap_token)
-
-            # update window title with city name
-            self.setWindowTitle("weatherApp - {}".format(city))
-
-            # display weather forecast on weatherApp window
-            self.displayWeather(weather_reports)
-
-            # display days on weatherApp window
-            self.displayDays()
-
-        except NoWeatherReportForGivenLocation:
-            QtWidgets.QMessageBox.about(self, "Can't reach weather report", "Please try again")
 
 
 def main():
