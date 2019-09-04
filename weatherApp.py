@@ -27,7 +27,7 @@ class WeatherApp(QtWidgets.QMainWindow):
             weather_reports = get_weather_reports(city, weathermap_token)
 
             # update window title with city name
-            self.setWindowTitle("weatherApp - {}".format(city))
+            self.setWindowTitle(f'weatherApp - {city}')
 
             # display weather forecast on weatherApp window
             self.displayWeather(weather_reports)
@@ -52,7 +52,7 @@ class WeatherApp(QtWidgets.QMainWindow):
             weather_reports = get_weather_reports(city, weathermap_token)
 
             # update window title with city name
-            self.setWindowTitle("weatherApp - {}".format(city))
+            self.setWindowTitle(f'weatherApp - {city}')
 
             # display weather forecast on weatherApp window
             self.displayWeather(weather_reports)
@@ -66,10 +66,10 @@ class WeatherApp(QtWidgets.QMainWindow):
     def displayWeather(self, weather_reports):
         # display labels with current city temperature, weather description with icons
         weather = get_current_weather(weather_reports[0])
-        self.cityTemp.setText('{}℃'.format(weather.currentTemp))
+        self.cityTemp.setText(f'{weather.currentTemp}℃')
         self.weatherDescription.setText(weather.weatherDesc)
 
-        self.todaysForecastTemp.setText('{} / {}℃'.format(weather.tempMin, weather.tempMax))
+        self.todaysForecastTemp.setText(f'{weather.tempMin} / {weather.tempMax}℃')
         self.todaysForecastDesc.setText(weather.weatherDescGen)
 
         icon = QPixmap(get_weather_icon(weather.icon))
@@ -78,7 +78,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         # display tomorrow's forecast with icons
         tomorrow = get_forecast_by_day(weather_reports[1], days_from_now=1)
 
-        self.tomoForecastTemp.setText('{} / {}℃'.format(tomorrow.tempMin, tomorrow.tempMax))
+        self.tomoForecastTemp.setText(f'{tomorrow.tempMin} / {tomorrow.tempMax}℃')
         self.tomoForecastDesc.setText(tomorrow.weatherDesc)
 
         icon = QPixmap(get_weather_icon(tomorrow.icon))
@@ -87,7 +87,7 @@ class WeatherApp(QtWidgets.QMainWindow):
         # display day after tomorrow's forecast with icons
         day_after = get_forecast_by_day(weather_reports[1], days_from_now=2)
 
-        self.dayAftersForecastTemp.setText('{} / {}℃'.format(day_after.tempMin, day_after.tempMax))
+        self.dayAftersForecastTemp.setText(f'{day_after.tempMin} / {day_after.tempMax}℃')
         self.dayAftersForecastDesc.setText(day_after.weatherDesc)
 
         icon = QPixmap(get_weather_icon(day_after.icon))
@@ -95,9 +95,9 @@ class WeatherApp(QtWidgets.QMainWindow):
 
     def displayDays(self):
         # display correct days
-        self.labelToday.setText(get_day().strftime("%A"))
-        self.labelTomorrow.setText(get_day(days_from_now=1).strftime("%A"))
-        self.labelDayAfter.setText(get_day(days_from_now=2).strftime("%A"))
+        self.labelToday.setText(get_day().strftime('%A'))
+        self.labelTomorrow.setText(get_day(days_from_now=1).strftime('%A'))
+        self.labelDayAfter.setText(get_day(days_from_now=2).strftime('%A'))
 
 
 def main():

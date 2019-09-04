@@ -24,8 +24,8 @@ def get_weather_icon(icon):
     :param icon: Pass icon name
     :return: File path for saved icon
     """
-    url = 'http://openweathermap.org/img/wn/{}.png'.format(icon)
-    filename = 'icons/{}.png'.format(icon)
+    url = f'http://openweathermap.org/img/wn/{icon}.png'
+    filename = f'icons/{icon}.png'
 
     urllib.request.urlretrieve(url=url, filename=filename)
 

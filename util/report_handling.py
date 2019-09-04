@@ -31,8 +31,8 @@ def get_weather_reports(city, weathermap_token):
     :param weathermap_token: Token used to get weather reports via OpenWeatherMap REST APIs
     :return: Current weather report and forecast weather report
     """
-    url1 = 'http://api.openweathermap.org/data/2.5/weather?appid={}&q={}'.format(weathermap_token, city)
-    url2 = 'http://api.openweathermap.org/data/2.5/forecast?appid={}&q={}'.format(weathermap_token, city)
+    url1 = f'http://api.openweathermap.org/data/2.5/weather?appid={weathermap_token}&q={city}'
+    url2 = f'http://api.openweathermap.org/data/2.5/forecast?appid={weathermap_token}&q={city}'
 
     loop = asyncio.get_event_loop()
     tasks = [
@@ -63,12 +63,12 @@ def get_current_weather(currentWeather):
     """
     weather = namedtuple('weather', 'currentTemp tempMin tempMax weatherDesc weatherDescGen icon')
 
-    weather.currentTemp = round(currentWeather["main"]["temp"] - 273.15, 1)
-    weather.tempMin = round(currentWeather["main"]["temp_min"] - 273.15, 1)
-    weather.tempMax = round(currentWeather["main"]["temp_max"] - 273.15, 1)
-    weather.weatherDesc = currentWeather["weather"][0]["description"]
-    weather.weatherDescGen = currentWeather["weather"][0]["main"]
-    weather.icon = currentWeather["weather"][0]["icon"]
+    weather.currentTemp = round(currentWeather['main']['temp'] - 273.15, 1)
+    weather.tempMin = round(currentWeather['main']['temp_min'] - 273.15, 1)
+    weather.tempMax = round(currentWeather['main']['temp_max'] - 273.15, 1)
+    weather.weatherDesc = currentWeather['weather'][0]['description']
+    weather.weatherDescGen = currentWeather['weather'][0]['main']
+    weather.icon = currentWeather['weather'][0]['icon']
 
     return weather
 
@@ -85,11 +85,11 @@ def get_forecast_by_day(forecast, days_from_now):
     # filters 5-day forecast to only specified day
     filteredForecast = []
     for i in range(0, 40):
-        date = forecast["list"][int(i)]["dt_txt"]
+        date = forecast['list'][int(i)]['dt_txt']
         day = parser.parse(date)
 
         if day.date() == neededDay:
-            filteredForecast.append(forecast["list"][int(i)])
+            filteredForecast.append(forecast['list'][int(i)])
             if len(filteredForecast) == 8:
                 break
 
