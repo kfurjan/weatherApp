@@ -18,29 +18,33 @@ class WeatherApp(QtWidgets.QMainWindow):
         self.data = read_yaml_file('data/tokens.yaml')
         
         try:
-            # get current location based on IP address
-            ipinfo_token = self.data['tokens']['ipinfo']
-            city = get_location(ipinfo_token)
-
-            # get weather reports
-            weathermap_token = self.data['tokens']['weathermap']
-            weather_reports = get_weather_reports(city, weathermap_token)
-
-            # update window title with city name
-            self.setWindowTitle(f'weatherApp - {city}')
-
-            # display weather forecast on weatherApp window
-            self.displayWeather(weather_reports)
-
-            # display days on weatherApp window
-            self.displayDays()
-
-             # call onClick function on button click
-            self.submitCity.clicked.connect(self.onClick)
+            # try to show weather report based on current location on application start up
+            self.showWeatherReportOnStartUp()
 
         except NoWeatherReportForGivenLocation:
             # call onClick function on button click
             self.submitCity.clicked.connect(self.onClick)
+
+    def showWeatherReportOnStartUp(self):
+        # get current location based on public IP address
+        ipinfo_token = self.data['tokens']['ipinfo']
+        city = get_location(ipinfo_token)
+
+        # get weather reports
+        weathermap_token = self.data['tokens']['weathermap']
+        weather_reports = get_weather_reports(city, weathermap_token)
+
+        # update window title with city name
+        self.setWindowTitle(f'weatherApp - {city}')
+
+        # display weather forecast on weatherApp window
+        self.displayWeather(weather_reports)
+
+        # display days on weatherApp window
+        self.displayDays()
+
+        # call onClick function on button click
+        self.submitCity.clicked.connect(self.onClick)
 
     def onClick(self):
         # get city from input field

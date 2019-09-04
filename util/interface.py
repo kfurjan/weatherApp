@@ -15,6 +15,7 @@ def get_day(days_from_now=0):
 
     today = datetime.date.today()
     day = today + datetime.timedelta(days=int(days_from_now))
+
     return day
 
 
