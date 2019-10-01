@@ -5,3 +5,4 @@ aiohttp
 asyncio
 python-dateutil
 ipinfo
+Django

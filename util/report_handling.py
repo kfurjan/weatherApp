@@ -1,11 +1,33 @@
 import asyncio
+from time import time
 from collections import namedtuple
+from functools import lru_cache, partial, update_wrapper
 
 import aiohttp
 from dateutil import parser
+from django.utils.functional import lazy
 
 from util.exceptions import NoWeatherReportForGivenLocation
 from util.interface import get_day
+
+
+def cache(seconds, maxsize=None, typed=False):
+    """
+    Caches each function for X seconds and maxsize different function calls 
+    :param seconds: For many seconds is result of a function cached
+    :param maxsize: Saves up to the maxsize most recent calls
+    :param typed: If typed is set to true, function arguments of different types will be cached separately
+    """
+    def wrapper(func):
+        ttl_hash = lazy(lambda: round(time() / seconds), int)()
+
+        @lru_cache(maxsize=maxsize, typed=typed)
+        def time_aware(__ttl, *args, **kwargs):
+            def wrapping(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapping(*args, **kwargs)
+        return update_wrapper(partial(time_aware, ttl_hash), func)
+    return wrapper
 
 
 async def get_response(url):
@@ -24,6 +46,7 @@ async def get_response(url):
             return await response.json()
 
 
+@cache(seconds=3600, maxsize=10)
 def get_weather_reports(city, weathermap_token):
     """
     Get current weather report and forecast weather report

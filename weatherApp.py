@@ -7,7 +7,7 @@ from util.exceptions import NoWeatherReportForGivenLocation
 from util.interface import get_day, get_weather_icon
 from util.location import get_location
 from util.read_yaml_file import read_yaml_file
-from util.report_handling import get_current_weather, get_forecast_by_day, get_weather_reports
+from util.report_handling import (get_current_weather, get_forecast_by_day, get_weather_reports)
 
 
 class WeatherApp(QtWidgets.QMainWindow):
