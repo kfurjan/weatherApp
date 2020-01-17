@@ -1,6 +1,6 @@
 PyYAML
 requests
-pyqt5
+PyQt5
 aiohttp
 asyncio
 python-dateutil
